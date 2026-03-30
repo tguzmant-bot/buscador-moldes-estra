@@ -22,7 +22,7 @@ MOL15209,H64-H76,1,2,Reubicación
 MOL15215,H64-H76,2,2,Reubicación
 MOL15212,H64-H76,3,2,Reubicación
 MOL15202,H64-H76,4,2,Reubicación
-MOL15208,H64,5,2,Reubicación
+MOL15208,H64-H76,5,2,Reubicación
 MOL8721,H64-H76,6,2,Reubicación
 MOL13725,H64-H76,7,2,Reubicación
 MOL9786,H64-H76,8,2,Reubicación
@@ -32,7 +32,7 @@ MOL13733,H64-H76,11,2,Reubicación
 MOL9883,H64-H76,1,3,Reubicación
 MOL8422,H64-H76,2,3,Reubicación
 MOL8965,H64-H76,3,3,Reubicación
-MOL8961,H64,4,3,Reubicación
+MOL8961,H64-H76,4,3,Reubicación
 MOL3893,H64-H76,5,3,Reubicación
 MOL15271,H64-H76,6,3,Reubicación
 MOL14768,H64-H76,7,3,Reubicación
@@ -109,6 +109,12 @@ MOL15296,H74-H85,1,4,Reubicación
 
 # Cargar datos en Pandas
 df = pd.read_csv(io.StringIO(data))
+# --- SECCIÓN DE LIMPIEZA DE DATOS ---
+# Usamos una expresión regular (regex) para borrar "MOL" o "Z" (sin importar mayúsculas/minúsculas)
+# El patrón '(MOL|Z)' busca 'MOL' O 'Z'.
+# case=False hace que no distinga entre 'mol', 'MOL', 'z', 'Z'.
+# regex=True activa el uso de expresiones regulares.
+df['MOLDE'] = df['MOLDE'].str.replace(r'(MOL|Z)', '', case=False, regex=True)
 
 # 2. TÍTULOS Y ENCABEZADOS DE LA INTERFAZ
 st.title("🚀 Sistema de Localización de Moldes")
