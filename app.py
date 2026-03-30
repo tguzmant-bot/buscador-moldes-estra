@@ -351,7 +351,7 @@ if btn_buscar or codigo_input: # Se ejecuta al dar clic o al dar Enter
                     st.metric(label="FILA", value=res['FILA'])
                 with col2:
                     st.metric(label="PUESTO", value=res['PUESTO'])
-                    st.metric(f"**NOTAS:** {res['NOTAS']}")
+                    st.write(f"**NOTAS:** {res['NOTAS']}")
                 
                 # CSS personalizado para darle el estilo verde de ESTRA
                 st.markdown(
