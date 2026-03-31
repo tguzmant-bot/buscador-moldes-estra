@@ -416,13 +416,7 @@ if btn_buscar or (codigo_input and not codigo_input.isspace()): # Se ejecuta al 
     else:
         st.warning("⚠️ Por favor, ingrese un número de molde antes de buscar.")
 
-
-# ... (El código anterior de NOTAS termina aquí) ...
-
-                    # ==========================================================
-                    # --- NUEVA SECCIÓN: PLANO ESQUEMÁTICO DE ESTIBAS ---
-                    # ==========================================================
-                    st.markdown("---") # Línea divisoria
+ st.markdown("---") # Línea divisoria
                     st.markdown("<h2 style='text-align: center; color: #2c3e50;'>🗺️ Plano Simplificado de Ubicación (ZONA 1)</h2>", unsafe_allow_html=True)
                      
                     # Usamos columnas laterales para centrar el mapa profesionalmente
@@ -531,4 +525,6 @@ if btn_buscar or (codigo_input and not codigo_input.isspace()): # Se ejecuta al 
                             </style>
                             """, unsafe_allow_html=True)
 
+
+                   
                     # ==========================================================
