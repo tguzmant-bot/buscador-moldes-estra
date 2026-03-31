@@ -237,7 +237,6 @@ MOL14671,H75-H76,1,1,ESTIBA 20
 MOL8421,H75-H76,1,2,ESTIBA 20
 MOL7863,H75-H76,2,1,ESTIBA 20
 MOL716,H75-H76,2,2,ESTIBA 20
-
 Z324-1,H75-H76,1,1,ESTIBA 21
 MOL14091,H75-H76,1,2,ESTIBA 21
 MOL13868,H75-H76,1,3,ESTIBA 21
@@ -246,26 +245,22 @@ MOL14089,H75-H76,2,2,ESTIBA 21
 MOL13303,H75-H76,2,3,ESTIBA 21
 MOL646,H75-H76,3,2,ESTIBA 21
 MOL14085,H75-H76,3,3,ESTIBA 21
-
 MOL4328,H75-H76,1,1,ESTIBA 23
 MOL4326,H75-H76,1,2,ESTIBA 23
 MOL718,H75-H76,2,1,ESTIBA 23
 MOL14087,H75-H76,2,2,ESTIBA 23
-
 MOL4286,H75-H76,1,1,ESTIBA 24
 15434,H75-H76,1,2,ESTIBA 24
 MOL4331,H75-H76,1,3,ESTIBA 24
 MOL15299,H75-H76,2,1,ESTIBA 24
 MOL4287,H75-H76,2,2,ESTIBA 24
 MOL4342,H75-H76,2,3,ESTIBA 24
-
 MOL14191,H75-H76,1,1,ESTIBA 25
 MOL14756,H75-H76,1,2,ESTIBA 25
 MOL14088,H75-H76,1,3,ESTIBA 25
 MOL13872,H75-H76,2,1,ESTIBA 25
 MOL15204,H75-H76,2,2,ESTIBA 25
 MOL892,H75-H76,2,3,ESTIBA 25
-
 MOL4333,H75-H76,1,1,ESTIBA 26
 MOL14345,H75-H76,1,2,ESTIBA 26
 MOL13472,H75-H76,1,3,ESTIBA 26
@@ -408,19 +403,13 @@ if btn_buscar or (codigo_input and not codigo_input.isspace()): # Se ejecuta al 
                         """,
                         unsafe_allow_html=True
                     )
-        else:
-            st.error(f"""
-                ❌ MOLDE NO ENCONTRADO
-                El código "{codigo_limpio_input}" no existe en el sistema actual de la ZONA 1.
-            """)
-    else:
-        st.warning("⚠️ Por favor, ingrese un número de molde antes de buscar.")
-
- st.markdown("---") # Línea divisoria
+                    
+                    # --- NUEVA SECCIÓN: PLANO ESQUEMÁTICO DE ESTIBAS (SANGRE CORREGIDA) ---
+                    st.markdown("---") # Línea divisoria
                     st.markdown("<h2 style='text-align: center; color: #2c3e50;'>🗺️ Plano Simplificado de Ubicación (ZONA 1)</h2>", unsafe_allow_html=True)
-                     
+                    
                     # Usamos columnas laterales para centrar el mapa profesionalmente
-                    p_left, p_mid, r_right = st.columns([1, 6, 1])
+                    p_left, p_mid, p_right = st.columns([1, 6, 1])
                     
                     with p_mid:
                         # 1. Creamos la base del plano simplificado con Matplotlib
@@ -455,9 +444,6 @@ if btn_buscar or (codigo_input and not codigo_input.isspace()): # Se ejecuta al 
 
                         # --- LÓGICA DE DIBUJO AUTOMÁTICO DE ESTIBAS ---
                         # Primero definimos una "coordenada base" para cada estiba
-                        # No dibujamos Puestos ni Filas, solo un bloque para la Estiba
-                        # El plano es una aproximación visual de la ubicación de los bloques de estiba del plano original.
-                        
                         estibas_coord = {
                             # Estibas superiores (H75) - Izquierda a derecha
                             '5': {'x': 10, 'y': 43}, '11': {'x': 30, 'y': 43}, '26': {'x': 50, 'y': 43}, '22': {'x': 70, 'y': 43},
@@ -479,8 +465,6 @@ if btn_buscar or (codigo_input and not codigo_input.isspace()): # Se ejecuta al 
                             ax.text(coord['x'] + 5, coord['y'] + 2, f"EST {num_estiba}", ha='center', va='center', fontsize=12, weight='normal', color='black')
 
                         # --- SECCIÓN: RESALTAR LA ESTIBA ENCONTRADA ---
-                        # Usamos la información de 'NOTAS' para saber qué estiba es.
-                        # En tu CSV de ejemplo, las notas suelen ser "ESTIBA X".
                         import re # Importamos Regex para sacar el número
                         
                         texto_nota = res['NOTAS'].upper() # Aseguramos mayúsculas
@@ -524,7 +508,10 @@ if btn_buscar or (codigo_input and not codigo_input.isspace()): # Se ejecuta al 
                                 }
                             </style>
                             """, unsafe_allow_html=True)
-
-
-                   
-                    # ==========================================================
+        else:
+            st.error(f"""
+                ❌ MOLDE NO ENCONTRADO
+                El código "{codigo_limpio_input}" no existe en el sistema actual de la ZONA 1.
+            """)
+    else:
+        st.warning("⚠️ Por favor, ingrese un número de molde antes de buscar.")
