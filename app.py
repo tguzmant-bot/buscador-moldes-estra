@@ -54,8 +54,9 @@ MOL9379,H64-H76,8,4,Reubicación
 MOL4161,H64-H76,9,4,Reubicación
 MOL3978,H64-H76,10,4,Reubicación
 MOL9857,H64-H76,11,4,Reubicación
-MOL13980,H75-H82,1,1,Reubicación
-MOL13553,H75-H82,2,1,Reubicación
+MOL15227,H75-H82,1,1,Reubicación
+MOL13980,H75-H82,2,1,Reubicación
+MOL13553,H75-H82,3,1,Reubicación
 MOL8182,H82-H84,1,1,Reubicación
 MOL15279,H82-H84,2,1,Reubicación
 MOL13812,H82-H84,3,1,Reubicación
