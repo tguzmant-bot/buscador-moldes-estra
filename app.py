@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import io
-import matplotlib.pyplot as plt # --- NUEVO IMPORT ---
 
 # Configuración de la página (Título en la pestaña del navegador, favicon y modo ancho)
 st.set_page_config(page_title="Localizador de Moldes ESTRA", page_icon="🚀", layout="wide")
@@ -151,7 +150,7 @@ MOL3899,H75-H76,1,3,ESTIBA 17
 MOL14303,H75-H76,2,1,ESTIBA 17
 MOL14346,H75-H76,2,2,ESTIBA 17
 MOL14769,H75-H76,2,3,ESTIBA 17
-MOL4320,H75-H76,2,4,Debajo de la estiba 17
+MOL4320,H75-H76,2,4,Debajo de las estiba 17
 MOL3901,H75-H76,1,1,ESTIBA 6
 MOL13148,H75-H76,1,2,ESTIBA 6
 Z324-2,H75-H76,1,3,ESTIBA 6
@@ -372,7 +371,7 @@ if btn_buscar or (codigo_input and not codigo_input.isspace()): # Se ejecuta al 
                             text-transform: uppercase;
                             margin-bottom: 8px;
                         ">
-                            NOTAS IMPORTANTES
+                            👉 👉 👉 NOTAS IMPORTANTES
                         </div>
                         <div style="
                             font-family: 'Segoe UI', sans-serif;
@@ -403,5 +402,10 @@ if btn_buscar or (codigo_input and not codigo_input.isspace()): # Se ejecuta al 
                         """,
                         unsafe_allow_html=True
                     )
-                    
-                  
+        else:
+            st.error(f"""
+                ❌ MOLDE NO ENCONTRADO
+                El código "{codigo_limpio_input}" no existe en el sistema actual de la ZONA 1.
+            """)
+    else:
+        st.warning("⚠️ Por favor, ingrese un número de molde antes de buscar.")
