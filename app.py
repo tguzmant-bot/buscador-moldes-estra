@@ -371,7 +371,7 @@ if btn_buscar or (codigo_input and not codigo_input.isspace()): # Se ejecuta al 
                             text-transform: uppercase;
                             margin-bottom: 8px;
                         ">
-                            👉 👉 👉 NOTAS IMPORTANTES
+                            NOTAS IMPORTANTES
                         </div>
                         <div style="
                             font-family: 'Segoe UI', sans-serif;
