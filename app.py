@@ -424,7 +424,7 @@ if btn_buscar or (codigo_input and not codigo_input.isspace()): # Se ejecuta al 
                     # ==========================================================
                     st.markdown("---") # Línea divisoria
                     st.markdown("<h2 style='text-align: center; color: #2c3e50;'>🗺️ Plano Simplificado de Ubicación (ZONA 1)</h2>", unsafe_allow_html=True)
-                    
+                     
                     # Usamos columnas laterales para centrar el mapa profesionalmente
                     p_left, p_mid, r_right = st.columns([1, 6, 1])
                     
