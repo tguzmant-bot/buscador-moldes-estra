@@ -2,10 +2,11 @@ import streamlit as st
 import pandas as pd
 import io
 
-# Configuración de la página (Título en la pestaña del navegador)
-st.set_page_config(page_title="Localizador de Moldes ESTRA", page_icon="🚀")
+# Configuración de la página (Título en la pestaña del navegador, favicon y modo ancho)
+st.set_page_config(page_title="Localizador de Moldes ESTRA", page_icon="🚀", layout="wide")
 
-# 1. BASE DE DATOS UNIFICADA (Pega aquí tus datos CSV tal cual)
+# 1. BASE DE DATOS UNIFICADA (Datos CSV originales tal cual)
+# He mantenido tus datos originales, incluyendo los formatos mezclados (MOL, Z, solo número)
 data = """MOLDE,UBICACIÓN,FILA,PUESTO,NOTAS
 MOL13736,H64-H76,1,1,Reubicación
 MOL8187,H64-H76,2,1,Reubicación
@@ -105,45 +106,37 @@ MOL3897,H74-H85,9,3,Reubicación
 MOL15228,H74-H85,10,3,Reubicación
 MOL15203,H74-H85,11,3,Reubicación
 MOL15296,H74-H85,1,4,Reubicación
-
 MOL8881,H75-H76,1,1,FILA IZQUIERDA AL LADO DE LA H75 Y ARRIBA DE ESTIBA 1
 MOL588,H75-H76,1,2,FILA IZQUIERDA AL LADO DE LA H75 Y ARRIBA DE ESTIBA 1
 MOL655,H75-H76,1,3,FILA IZQUIERDA AL LADO DE LA H75 Y ARRIBA DE ESTIBA 1
 MOL13731,H75-H76,1,4,FILA IZQUIERDA AL LADO DE LA H75 Y ARRIBA DE ESTIBA 1
 MOL712,H75-H76,1,5,FILA IZQUIERDA AL LADO DE LA H75 Y ARRIBA DE ESTIBA 1
-
 MOL7961,H75-H76,1,1,AL LADO DE H75 Y ARRIBA DE ESTIBA 5
 MOL7961,H75-H76,2,1,AL LADO DE H75 Y ARRIBA DE ESTIBA 5
-
 MOL3904,H75-H76,1,1,ESTIBA 11
 MOL13449,H75-H76,2,1,ESTIBA 11
 MOL14454,H75-H76,1,2,ESTIBA 11
 MOL14036,H75-H76,2,2,ESTIBA 11
 MOL14597,H75-H76,1,3,ESTIBA 11
 Z103,H75-H76,2,3,ESTIBA 11
-
 MOL6862,H75-H76,2,1,FILA DERECHA AL LADO DE LA H75 Y ARRIBA DE ESTIBA 17
 MOL3988,H75-H76,2,2,FILA DERECHA AL LADO DE LA H75 Y ARRIBA DE ESTIBA 17
 MOL6381,H75-H76,2,3,FILA DERECHA AL LADO DE LA H75 Y ARRIBA DE ESTIBA 17
 MOL6446,H75-H76,2,4,FILA DERECHA AL LADO DE LA H75 Y ARRIBA DE ESTIBA 17
 MOL714,H75-H76,2,5,FILA DERECHA AL LADO DE LA H75 Y ARRIBA DE ESTIBA 17
 Z98,H75-H76,2,6,FILA DERECHA AL LADO DE LA H75 Y ARRIBA DE ESTIBA 17
-
 MOL14192,H75-H76,1,2,ESTIBA 22
 MOL14455,H75-H76,2,1,ESTIBA 22
 MOL7981,H75-H76,1,2,ESTIBA 22
 MOL884,H75-H76,2,2,ESTIBA 22
 MOL908,H75-H76,1,3,ESTIBA 22
 MOL4329,H75-H76,2,3,ESTIBA 22
-
 MOL14792,H75-H76,1,1,ESTIBA 5
 MOL13447,H75-H76,2,1,ESTIBA 5
 MOL9064,H75-H76,3,1,ESTIBA 5
 MOL9225,H75-H76,1,2,ESTIBA 5
 MOL13448,H75-H76,2,2,ESTIBA 5
 MOL14748,H75-H76,3,2,ESTIBA 5
-
-
 MOL14672,H75-H76,2,1,ESTIBA 12
 MOL14090,H75-H76,3,1,ESTIBA 12
 MOL13446,H75-H76,1,2,ESTIBA 12
@@ -151,7 +144,6 @@ MOL876,H75-H76,2,2,ESTIBA 12
 MOL9065,H75-H76,3,2,ESTIBA 12
 MOL3994,H75-H76,1,3,ESTIBA 12
 MOL4327,H75-H76,2,3,ESTIBA 12
-
 MOL3983,H75-H76,1,1,ESTIBA 17
 MOL14347,H75-H76,1,2,ESTIBA 17
 MOL3899,H75-H76,1,3,ESTIBA 17
@@ -159,112 +151,91 @@ MOL14303,H75-H76,2,1,ESTIBA 17
 MOL14346,H75-H76,2,2,ESTIBA 17
 MOL14769,H75-H76,2,3,ESTIBA 17
 MOL4320,H75-H76,2,4,Debajo de las estiba 17
-
 MOL3901,H75-H76,1,1,ESTIBA 6
 MOL13148,H75-H76,1,2,ESTIBA 6
 Z324-2,H75-H76,1,3,ESTIBA 6
 MOL14576,H75-H76,2,1,ESTIBA 6
 MOL9732,H75-H76,2,2,ESTIBA 6
 MOL13450,H75-H76,2,3,ESTIBA 6
-
 MOL4332,H75-H76,1,1,ESTIBA 1
 MOL13133,H75-H76,2,1,ESTIBA 1
 Z161,H75-H76,3,1,ESTIBA 1
 MOL8724,H75-H76,1,2,ESTIBA 1
 MOL6885,H75-H76,2,2,ESTIBA 1
 MOL4349,H75-H76,3,2,ESTIBA 1
-
-
 MOL14082,H75-H76,1,1,ESTIBA 2
 MOL602,H75-H76,1,2,ESTIBA 2
 Z162,H75-H76,1,3,ESTIBA 2
 MOL4346,H75-H76,2,1,ESTIBA 2
 MOL3898,H75-H76,2,2,ESTIBA 2
-
-
 MOL4324,H75-H76,1,1,ESTIBA 3
 MOL3948,H75-H76,1,2,ESTIBA 3
 MOL4344,H75-H76,1,3,ESTIBA 3
 MOL4160,H75-H76,2,1,ESTIBA 3
 MOL7122,H75-H76,2,2,ESTIBA 3
 MOL14083,H75-H76,2,3,ESTIBA 3
-
 MOL655,H75-H76,1,1,ESTIBA 4
 MOL13861,H75-H76,2,1,ESTIBA 4
 MOL8968,H75-H76,1,2,ESTIBA 4
 MOL4347,H75-H76,2,2,ESTIBA 4
 MOL15262,H75-H76,3,2,ESTIBA 4
-
 MOL4348,H75-H76,1,1,ESTIBA 7
 MOL4165,H75-H76,1,2,ESTIBA 7
 MOL7323,H75-H76,1,3,ESTIBA 7
 MOL7123,H75-H76,2,1,ESTIBA 7
 MOL13734,H75-H76,2,2,ESTIBA 7
 MOL4317,H75-H76,2,3,ESTIBA 7
-
 MOL9812,H75-H76,1,1,ESTIBA 8
 MOL590,H75-H76,2,1,ESTIBA 8
 MOL8322,H75-H76,1,2,ESTIBA 8
 MOL4339,H75-H76,2,2,ESTIBA 8
 MOL7961,H75-H76,3,2,ESTIBA 8
-
 MOL14716,H75-H76,1,1,ESTIBA 9
 MOL709,H75-H76,1,2,ESTIBA 9
 MOL13622,H75-H76,2,1,ESTIBA 9
 MOL6882,H75-H76,2,2,ESTIBA 9
 MOL872,H75-H76,2,3,ESTIBA 9
 MOL14791,H75-H76,3,3,ESTIBA 9
-
 Z276,H75-H76,1,1,ESTIBA 10
 MOL15263,H75-H76,1,2,ESTIBA 10
 MOL15261,H75-H76,1,3,ESTIBA 10
 MOL13863,H75-H76,2,1,ESTIBA 10
 MOL7441,H75-H76,2,2,ESTIBA 10
 MOL15264,H75-H76,2,3,ESTIBA 10
-
-
 MOL4143,H75-H76,1,1,ESTIBA 13
 MOL706,H75-H76,1,2,ESTIBA 13
 MOL8964,H75-H76,1,3,ESTIBA 13
 MOL15223,H75-H76,2,1,ESTIBA 13
 MOL9858,H75-H76,2,1,ESTIBA 13
-
 MOL4323,H75-H76,1,1,ESTIBA 14
 MOL4341,H75-H76,1,2,ESTIBA 14
 MOL8081,H75-H76,1,3,ESTIBA 14
 MOL13118,H75-H76,2,2,ESTIBA 14
 MOL4340,H75-H76,2,3,ESTIBA 14
-
 MOL8185,H75-H76,1,1,ESTIBA 15
 MOL6893,H75-H76,1,2,ESTIBA 15
 MOL14037,H75-H76,1,3,ESTIBA 15	
 MOL9794,H75-H76,2,2,ESTIBA 15
-
 MOL4289,H75-H76,1,1,ESTIBA 16
 MOL4169,H75-H76,1,2,ESTIBA 16
 MOL9791,H75-H76,1,3,ESTIBA 16
 MOL215727,H75-H76,2,1,ESTIBA 16
 MOL13867,H75-H76,2,2,ESTIBA 16
 MOL13864,H75-H76,2,3,ESTIBA 16
-
-
 MOL4320,H75-H76,1,1,ESTIBA 18
 MOL6348,H75-H76,2,1,ESTIBA 18
 MOL625,H75-H76,1,2,ESTIBA 18
 MOL4318,H75-H76,2,2,ESTIBA 18
 MOL9434,H75-H76,3,2,ESTIBA 18
-
 MOL14086,H75-H76,1,1,ESTIBA 19
 MOL13739,H75-H76,1,2,ESTIBA 19
 MOL761,H75-H76,1,3,ESTIBA 19
 MOL3987,H75-H76,2,1,ESTIBA 19
 MOLZ173,H75-H76,2,2,ESTIBA 19
-
 MOL14671,H75-H76,1,1,ESTIBA 20
 MOL8421,H75-H76,1,2,ESTIBA 20
 MOL7863,H75-H76,2,1,ESTIBA 20
 MOL716,H75-H76,2,2,ESTIBA 20
-
 Z324-1,H75-H76,1,1,ESTIBA 21
 MOL14091,H75-H76,1,2,ESTIBA 21
 MOL13868,H75-H76,1,3,ESTIBA 21
@@ -273,109 +244,168 @@ MOL14089,H75-H76,2,2,ESTIBA 21
 MOL13303,H75-H76,2,3,ESTIBA 21
 MOL646,H75-H76,3,2,ESTIBA 21
 MOL14085,H75-H76,3,3,ESTIBA 21
-
 MOL4328,H75-H76,1,1,ESTIBA 23
 MOL4326,H75-H76,1,2,ESTIBA 23
 MOL718,H75-H76,2,1,ESTIBA 23
 MOL14087,H75-H76,2,2,ESTIBA 23
-
 MOL4286,H75-H76,1,1,ESTIBA 24
 15434,H75-H76,1,2,ESTIBA 24
 MOL4331,H75-H76,1,3,ESTIBA 24
 MOL15299,H75-H76,2,1,ESTIBA 24
 MOL4287,H75-H76,2,2,ESTIBA 24
 MOL4342,H75-H76,2,3,ESTIBA 24
-
 MOL14191,H75-H76,1,1,ESTIBA 25
 MOL14756,H75-H76,1,2,ESTIBA 25
 MOL14088,H75-H76,1,3,ESTIBA 25
 MOL13872,H75-H76,2,1,ESTIBA 25
 MOL15204,H75-H76,2,2,ESTIBA 25
 MOL892,H75-H76,2,3,ESTIBA 25
-
 MOL4333,H75-H76,1,1,ESTIBA 26
 MOL14345,H75-H76,1,2,ESTIBA 26
 MOL13472,H75-H76,1,3,ESTIBA 26
 MOL6886,H75-H76,2,1,ESTIBA 26
 MOL8082,H75-H76,2,2,ESTIBA 26
 MOL13730,H75-H76,2,3,ESTIBA 26
-
-
 """
 
-# Cargar datos en Pandas
+# Cargar datos originales en Pandas
 df = pd.read_csv(io.StringIO(data))
-# --- SECCIÓN DE LIMPIEZA DE DATOS ---
-# Usamos una expresión regular (regex) para borrar "MOL" o "Z" (sin importar mayúsculas/minúsculas)
-# El patrón '(MOL|Z)' busca 'MOL' O 'Z'.
-# case=False hace que no distinga entre 'mol', 'MOL', 'z', 'Z'.
-# regex=True activa el uso de expresiones regulares.
+
+# --- SECCIÓN DE LIMPIEZA DE DATOS (Interna) ---
+# Usamos regex para borrar "MOL" o "Z" (mayúsculas o minúsculas) de la columna 'MOLDE'
+# case=False para ignorar diferencias entre MOL/mol o Z/z.
+# regex=True para usar expresiones regulares.
+# r'(MOL|Z)' significa "buscar la cadena MOL O buscar la letra Z".
 df['MOLDE'] = df['MOLDE'].str.replace(r'(MOL|Z)', '', case=False, regex=True)
 
 # 2. TÍTULOS Y ENCABEZADOS DE LA INTERFAZ
-st.title("🚀 Sistema de Localización de Moldes")
-st.subheader("Sector ZONA 1")
+# Centramos el título profesional para que se vea más profesional en modo "wide"
+st.markdown("<h1 style='text-align: center; color: #2c3e50;'>🚀 Sistema de Localización de Moldes</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: #7f8c8d;'>Sector ZONA 1</h3>", unsafe_allow_html=True)
 st.markdown("---") # Línea divisoria
 
 # 3. COMPONENTES DE LA INTERFAZ
-# Cuadro de texto para la búsqueda
-codigo_input = st.text_input(
-    label="🆔 MOLDE:",
-    placeholder="Escriba el código (Ej: MOL13736)",
-    help="Ingrese el código completo del molde"
-)
+# Centramos el buscador usando columnas
+col_left, col_mid, col_right = st.columns([1, 2, 1])
 
-# Botón de búsqueda
-btn_buscar = st.button(
-    label="🔍 BUSCAR UBICACIÓN",
-    type="primary" # Lo hace resaltar en color azul por defecto en Streamlit
-)
+with col_mid:
+    # Cuadro de texto para la búsqueda
+    codigo_input = st.text_input(
+        label="🆔 MOLDE:",
+        # --- ACTUALIZADO: Texto de ayuda para el operario ---
+        placeholder="Escriba el número (Ej: 13736 o 324)",
+        help="Ingrese el número del molde, puede escribir 'MOL', 'Z', minúsculas o solo el código numérico"
+    )
+
+    # Botón de búsqueda centrado internamente
+    col_btn_l, col_btn_m, col_btn_r = st.columns([1, 2, 1])
+    with col_btn_m:
+        btn_buscar = st.button(
+            label="🔍 BUSCAR UBICACIÓN",
+            type="primary", # Botón azul resaltado
+            use_container_width=True # Ocupa todo el ancho de su columna
+        )
 
 # 4. LÓGICA DE BÚSQUEDA
-if btn_buscar or codigo_input: # Se ejecuta al dar clic o al dar Enter
+if btn_buscar or (codigo_input and not codigo_input.isspace()): # Se ejecuta al dar clic o al dar Enter
     st.markdown("---") # Otra línea divisoria
     
-    codigo = codigo_input.strip().upper()
+    # --- AQUÍ ESTÁ EL CAMBIO CLAVE PARA BORRAR MOL O Z INDEPENDIENTE DEL CASO ---
+    # Limpiamos la entrada del operario antes de buscar
+    # Primero quitamos espacios extras y lo pasamos a mayúsculas
+    entrada_limpia = codigo_input.strip().upper()
     
-    if not codigo:
-        st.warning("⚠️ Por favor, ingrese un número de molde.")
-    else:
-        # Realizar la búsqueda en el DataFrame
-        resultado = df[df['MOLDE'].str.upper() == codigo]
+    # Ahora borramos "MOL" o "Z" de lo que el técnico escribió de forma manual y robusta
+    # Primero verificamos que no esté vacío el input limpio
+    if entrada_limpia:
+        # Usamos una variable intermedia para la limpieza del input
+        codigo_limpio_input = entrada_limpia
+        # Si la entrada contiene 'MOL', lo borramos. Al ya estar en mayúsculas, 'MOL' == 'mol'.str.upper()
+        if 'MOL' in entrada_limpia:
+            codigo_limpio_input = entrada_limpia.replace('MOL', '')
+        # Si la entrada contiene 'Z', la borramos. Al ya estar en mayúsculas, 'Z' == 'z'.str.upper()
+        elif 'Z' in entrada_limpia:
+            codigo_limpio_input = entrada_limpia.replace('Z', '')
+        # Si no tiene MOL ni Z, codigo_limpio_input ya es igual a entrada_limpia
+
+        # Realizar la búsqueda en el DataFrame (que ya está limpio internamente)
+        resultado = df[df['MOLDE'] == codigo_limpio_input]
         
         if not resultado.empty:
             res = resultado.iloc[0]
             
-            # Crear una tarjeta visual profesional para el resultado
-            with st.container():
-                st.success("📍 UBICACIÓN EN PLANTA ENCONTRADA")
-                
-                # Usar columnas para organizar la información
-                col1, col2 = st.columns(2)
-                with col1:
-                    st.metric(label="UBICACIÓN", value=res['UBICACIÓN'])
-                    st.metric(label="FILA", value=res['FILA'])
-                with col2:
-                    st.metric(label="PUESTO", value=res['PUESTO'])
-                    st.write(f"**NOTAS:** {res['NOTAS']}")
-                
-                # CSS personalizado para darle el estilo verde de ESTRA
-                st.markdown(
-                    """
-                    <style>
-                    [data-testid="stMetricValue"] {
-                        color: #28a745;
-                        font-weight: bold;
-                    }
-                    div.stAlert {
+            # Usamos columnas laterales vacías para centrar el resultado profesionalmente
+            r_left, r_mid, r_right = st.columns([1, 4, 1])
+            
+            with r_mid:
+                # Crear una tarjeta visual profesional para el resultado
+                with st.container():
+                    st.success(f"📍 UBICACIÓN EN PLANTA ENCONTRADA PARA EL MOLDE: {codigo_limpio_input}")
+                    
+                    # --- ESTA ES LA PARTE CLAVE PARA IGUALAR EL TAMAÑO DE LAS NOTAS ---
+                    # Organizamos la información en métricas profesionales
+                    col_met1, col_met2, col_met3 = st.columns(3)
+                    with col_met1:
+                        st.metric(label="UBICACIÓN / ESTANTERÍA", value=res['UBICACIÓN'])
+                    with col_met2:
+                        st.metric(label="FILA", value=res['FILA'])
+                    with col_met3:
+                        st.metric(label="PUESTO", value=res['PUESTO'])
+                    
+                    # Ahora creamos una "métrica" personalizada para las notas usando HTML/CSS
+                    # Esto replica el aspecto visual de las métricas (fondo, bordes, fuente grande)
+                    html_notas = f"""
+                    <div style="
+                        background-color: white;
                         border-left: 10px solid #28a745;
-                    }
-                    </style>
-                    """,
-                    unsafe_allow_html=True
-                )
+                        border-radius: 8px;
+                        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                        padding: 20px;
+                        margin-top: 20px;
+                    ">
+                        <div style="
+                            font-family: sans-serif;
+                            font-size: 14px;
+                            font-weight: bold;
+                            color: #555;
+                            text-transform: uppercase;
+                            margin-bottom: 8px;
+                        ">
+                            👉 👉 👉 NOTAS IMPORTANTES
+                        </div>
+                        <div style="
+                            font-family: 'Segoe UI', sans-serif;
+                            font-size: 36px;
+                            font-weight: 700;
+                            color: #000;
+                            line-height: 1.2;
+                        ">
+                            {res['NOTAS']}
+                        </div>
+                    </div>
+                    """
+                    st.markdown(html_notas, unsafe_allow_html=True)
+                    
+                    # CSS personalizado adicional para darle el estilo verde de ESTRA a las métricas nativas
+                    st.markdown(
+                        """
+                        <style>
+                        [data-testid="stMetricValue"] {
+                            color: #28a745;
+                            font-weight: bold;
+                        }
+                        /* Cambiar color de fondo del alert de éxito para que sea verde ESTRA */
+                        div[data-testid="stAlertSucces"] {
+                            border-left: 10px solid #28a745;
+                        }
+                        </style>
+                        """,
+                        unsafe_allow_html=True
+                    )
         else:
             st.error(f"""
                 ❌ MOLDE NO ENCONTRADO
-                El código "{codigo}" no existe en el sistema actual.
+                El código "{codigo_limpio_input}" no existe en el sistema actual de la ZONA 1.
             """)
+    else:
+        st.warning("⚠️ Por favor, ingrese un número de molde antes de buscar.")
