@@ -109,11 +109,11 @@ MOL15203,H74-H85,11,3,Reubicación
 MOL15296,H74-H85,1,4,Reubicación
 MOL6344,Sopladora 2,1,1,Reubicación
 MOL13230, Sopladora 2,1,2,Reubicación
-MOL8881,Frente Estan 1,1,1,ESTIBA 27
-MOL588,Frente Estan 1,1,2,ESTIBA 27
-MOL655,Frente Estan 1,1,3,ESTIBA 27
-MOL13731,Frente Estan 1,1,4,ESTIBA 27
-MOL712,Frente Estan 1,1,5,ESTIBA 27
+MOL8881,Frente Estan 1,1,1,ESTIBA 
+MOL588,Frente Estan 1,1,2,ESTIBA 
+MOL655,Frente Estan 1,1,3,ESTIBA 
+MOL13731,Frente Estan 1,1,4,ESTIBA 
+MOL712,Frente Estan 1,1,5,ESTIBA 
 MOL3904,Sopladora 2,1,1,ESTIBA 11
 MOL13449,Sopladora 2,2,1,ESTIBA 11
 MOL14454,Sopladora 2,1,2,ESTIBA 11
