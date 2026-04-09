@@ -391,7 +391,7 @@ if btn_buscar or (codigo_input and not codigo_input.isspace()): # Se ejecuta al 
                         </div>
                         <div style="
                             font-family: 'Segoe UI', sans-serif;
-                            font-size: 36px;
+                            font-size: 30px; 
                             font-weight: 700;
                             color: #000;
                             line-height: 1.2;
