@@ -15,7 +15,7 @@ MOL14470,H64-H76,4,1,Reubicación
 MOL13813,H64-H76,5,1,Reubicación
 MOL15306,H64-H76,6,1,Reubicación
 Z324,H64-H76,7,1,Reubicación
-MOL15206,H64-H76,8,1,Reubicación
+MOL15206,H64-H76,8,1,Reubicación 
 MOL13883,H64-H76,9,1,Reubicación
 MOL13882,H64-H76,10,1,Reubicación
 MOL15211,H64-H76,11,1,Reubicación
@@ -126,7 +126,7 @@ MOL6381,H75-H76,2,3,FILA DERECHA AL LADO DE LA H75 Y ARRIBA DE ESTIBA 17
 MOL6446,H75-H76,2,4,FILA DERECHA AL LADO DE LA H75 Y ARRIBA DE ESTIBA 17
 MOL714,H75-H76,2,5,FILA DERECHA AL LADO DE LA H75 Y ARRIBA DE ESTIBA 17
 Z98,H75-H76,2,6,FILA DERECHA AL LADO DE LA H75 Y ARRIBA DE ESTIBA 17
-MOL14192,H73-S1,1,2,ESTANTERÍA 1
+MOL14192,ESTANTERÍA 1,1,3, 1 gancho de 16mm
 MOL14455,H73-S1,2,1,ESTANTERÍA 1
 MOL7981,H73-S1,1,2,ESTANTERÍA 1
 MOL884,H73-S1,2,2,ESTANTERÍA 1
@@ -335,6 +335,20 @@ if btn_buscar or (codigo_input and not codigo_input.isspace()): # Se ejecuta al 
         if not resultado.empty:
             res = resultado.iloc[0]
             
+         # --- NUEVA LÓGICA INTELIGENTE: ESTANTERÍA VS ESTIBAS/MÁQUINAS ---
+            # Convertimos a mayúsculas para buscar fácilmente
+            notas_texto = str(res['NOTAS']).upper()
+            ubicacion_texto = str(res['UBICACIÓN']).upper()
+            
+            # Buscamos "ESTANTER" (sin tilde para evitar errores de tipeo)
+            if "ESTANTER" in notas_texto or "ESTANTER" in ubicacion_texto:
+                label_y = "NIVEL"
+                label_x = "PISO"
+            else:
+                label_y = "FILA"
+                label_x = "PUESTO"
+            # ----------------------------------------------------------------
+            
             # Usamos columnas laterales vacías para centrar el resultado profesionalmente
             r_left, r_mid, r_right = st.columns([1, 4, 1])
             
@@ -343,15 +357,16 @@ if btn_buscar or (codigo_input and not codigo_input.isspace()): # Se ejecuta al 
                 with st.container():
                     st.success(f"📍 UBICACIÓN EN PLANTA ENCONTRADA PARA EL MOLDE: {codigo_limpio_input}")
                     
-                    # --- ESTA ES LA PARTE CLAVE PARA IGUALAR EL TAMAÑO DE LAS NOTAS ---
                     # Organizamos la información en métricas profesionales
                     col_met1, col_met2, col_met3 = st.columns(3)
                     with col_met1:
-                        st.metric(label="UBICACIÓN / ESTANTERÍA", value=res['UBICACIÓN'])
+                        st.metric(label="UBICACIÓN / SECTOR", value=res['UBICACIÓN'])
                     with col_met2:
-                        st.metric(label="FILA", value=res['FILA'])
+                        # Usamos la etiqueta dinámica calculada arriba
+                        st.metric(label=label_y, value=res['FILA'])
                     with col_met3:
-                        st.metric(label="PUESTO", value=res['PUESTO'])
+                        # Usamos la etiqueta dinámica calculada arriba
+                        st.metric(label=label_x, value=res['PUESTO'])
                     
                     # Ahora creamos una "métrica" personalizada para las notas usando HTML/CSS
                     # Esto replica el aspecto visual de las métricas (fondo, bordes, fuente grande)
